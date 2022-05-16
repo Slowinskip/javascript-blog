@@ -1,3 +1,4 @@
+{
 'use strict';
 
 /*
@@ -5,8 +6,6 @@ document.getElementById('test-button').addEventListener('click', function() {
     const links = document.querySelectorAll('.title a');
     console.log('links :', links);
 }); */
-
-
 
 const titleClickHandler = function(event){
     console.log('Link was clicked!')
@@ -44,13 +43,59 @@ const titleClickHandler = function(event){
     /* [DONE] add class 'active' to the correct article */
     
     correctArticle.classList.add('active');
-    
+};
 
-  };
-  const links = document.querySelectorAll('.titles a');
+
+const optArticleSelector = '.post',
+    optTitleSelector = '.post-title',
+    optTitleListSelector = '.titles';
+
+function generateTitleLinks(){
+
+  /* [DONE] remove contents of titleList */
+    const titleList = document.querySelector(optTitleListSelector);
+    console.log(titleList);
   
-  for(let link of links){
+    function clearMessages(){
+        titleList.innerHTML = '';
+    }
+    clearMessages();
+
+    let html = '';
+  /* [DONE] for each article */
+
+    const articles = document.querySelectorAll(optArticleSelector);
+    console.log(articles);
+
+    for(let article of articles) {
+
+    /* [DONE] get the article id */
+   
+    const articleId = article.getAttribute('id');
+    console.log('ArticleId: ' + articleId);
+
+    /* [DONE] find the title element */
+    const articleTitle = article.querySelector(optTitleSelector).innerHTML;
+    console.log(articleTitle);    
+    /* get the title from the title element */
+      
+    /* [DONE] create HTML of the link */
+    const linkHTML = '<li><a href="#' + articleId + '"><span>' + articleTitle + '</span></a></li>';
+    console.log(linkHTML);  
+    /* insert link into titleList */
+    html = html + linkHTML;
+    }
+    titleList.innerHTML = html;
+};
+
+generateTitleLinks();
+
+
+const links = document.querySelectorAll('.titles a');
+    console.log (links);
+  
+for(let link of links){
     link.addEventListener('click', titleClickHandler);
 }
-  
-  
+
+}
