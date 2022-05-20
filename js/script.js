@@ -186,4 +186,18 @@
     }
   }
   generateAuthors();
+
+
+  
+  function addClickListenersToAuthors () {
+    const allAuthorsLinks = document.querySelectorAll('a[href^="#author-"]');
+    
+    for (let allAuthorLink of allAuthorsLinks) {
+      allAuthorLink.addEventListener('click', authorClickHandler);
+    }
+
+  }
+
+  addClickListenersToAuthors();
+
 }
