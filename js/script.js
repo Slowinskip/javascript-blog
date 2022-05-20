@@ -140,7 +140,7 @@
     /* END LOOP: for each active tag link */
     }
     /* find all tag links with "href" attribute equal to the "href" constant */
-    const clickedTags = document.querySelectorAll('a.active[href^="#tag-"]');
+    const clickedTags = document.querySelectorAll('a[href="' + href + '"]');
     /* START LOOP: for each found tag link */
     for (let clickedTag of clickedTags) {
       /* add class active */
@@ -187,8 +187,32 @@
   }
   generateAuthors();
 
+  // eslint-disable-next-line no-inner-declarations
+  function authorClickHandler (event) {
+    event.preventDefault();
 
-  
+    const clickedElement = this;
+
+    const href = clickedElement.getAttribute('href');
+    
+    const author = href.replace('#author-','');
+
+    const activeAuthors = document.querySelectorAll('a.active[href^="#author-"]')
+    
+    for (let activeAuthor of activeAuthors){
+      activeAuthor.classList.remove('active');
+    }
+
+    const clickedAuthors = document.querySelectorAll('a[href^="#author-' + href + '"]');
+
+    for (let clickedAuthor of clickedAuthors) {
+      clickedAuthor.classList.add('active');
+    }
+
+    generateTitleLinks('[data-author="' + author + '"]');
+  }
+
+  // eslint-disable-next-line no-inner-declarations
   function addClickListenersToAuthors () {
     const allAuthorsLinks = document.querySelectorAll('a[href^="#author-"]');
     
