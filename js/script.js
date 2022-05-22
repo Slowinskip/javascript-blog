@@ -37,7 +37,8 @@
     optTitleSelector = '.post-title',
     optTitleListSelector = '.titles',
     optArticleTagsSelector = '.post-tags .list',
-    optArticleAuthorSelector = '.post .post-author';
+    optArticleAuthorSelector = '.post .post-author',
+    optTagsListSelector = '.list.tags';
 
   // eslint-disable-next-line no-inner-declarations
   function generateTitleLinks(customSelector = '') {
@@ -81,6 +82,9 @@
 
   // eslint-disable-next-line no-inner-declarations
   function generateTags() {
+    /* [NEW] create a new variable allTags with an empty array */
+    let allTags = {};
+    
     /* find all articles */
     const allArticles = document.querySelectorAll(optArticleSelector);
 
@@ -108,7 +112,13 @@
         /* add generated code to html variable */
         html = html + tagsHTML;
         
-      
+        /* [NEW] check if this link is NOT already in allTags */
+        if(allTags.indexOf(tagsHTML) == -1){
+        /* [NEW] add generated code to allTags array */
+          allTags.push(tagsHTML);
+          console.log(tagsHTML);
+        }
+        
         /* END LOOP: for each tag */
       }
       
@@ -117,6 +127,11 @@
     
       /* END LOOP: for every article: */
     }
+    /* [NEW] find list of tags in right column */
+    const tagList = document.querySelector(optTagsListSelector);
+    console.log(tagList);
+    /* [NEW] add html from allTags to tagList */
+    tagList.innerHTML = allTags.join(' ');
   }
   
   generateTags();
