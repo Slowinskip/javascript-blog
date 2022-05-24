@@ -167,19 +167,16 @@
     /* [NEW] create variable for all links HTML code */
     const tagsParams = calculateTagsParams(allTags);
     console.log('tagsParams:', tagsParams);
-    // let allTagsHTML = '';
-    const allTagsData = {tags: []};
+    let allTagsHTML = '';
+
     /* [NEW] START LOOP: for each tag in allTags: */
     for(let tag in allTags){
       /* [NEW] generate code of a link and add it to allTagsHTML */
-      allTagsData.tags.push({
-        tag: tag,
-        count: allTags[tag],
-        className: calculateTagClass(allTags[tag], tagsParams)
-      /* [NEW] END LOOP: for each tag in allTags: */
-      })}
+      allTagsHTML += '<li><a href="#tag-' + tag + '">' + tag + ' (' + allTags[tag] + ')' + '</a></li>';
+    /* [NEW] END LOOP: for each tag in allTags: */
+    }
     /*[NEW] add HTML from allTagsHTML to tagList */
-    tagList.innerHTML = allTagsData;
+    tagList.innerHTML = allTagsHTML;
   }
   
   generateTags();
@@ -231,6 +228,7 @@
 
   // eslint-disable-next-line no-inner-declarations
   function generateAuthors () {
+    let allAuthors = {};
     const allArticle = document.querySelectorAll(optArticleSelector);
 
     for (let author of allArticle) {
@@ -246,8 +244,23 @@
       html = html + authorHTML;
 
       wrapper.innerHTML = by + html;      
+
+      if(!allAuthors[articleAuthors]){
+        allAuthors[articleAuthors] = 1;
+      } else {
+        allAuthors[articleAuthors]++;
+      }
+    }console.log(allAuthors);
+
+    const authorList = document.querySelector(optAuthorsListSelector);
+    
+    let allAuthorsHTML = '';
+
+    for (let author in allAuthors) {
+      allAuthorsHTML +='<li><a href="#author-' +author +'"><span>' + author +' (' +allAuthors[author] +')</span></a></li> ';
     }
-  }
+    authorList.innerHTML = allAuthorsHTML;
+  };
   generateAuthors();
 
   // eslint-disable-next-line no-inner-declarations
@@ -282,7 +295,11 @@
     for (let allAuthorLink of allAuthorsLinks) {
       allAuthorLink.addEventListener('click', authorClickHandler);
     }
+    const authorLinksList =document.querySelectorAll('.authors.list a');
 
+    for (let authorLinkList of authorLinksList) {
+      authorLinkList.addEventListener('click', authorClickHandler);
+    }
   }
 
   addClickListenersToAuthors();
