@@ -1,6 +1,6 @@
 {
   'use strict';
-
+  
   const titleClickHandler = function (event) {
     const clickedElement = this;
     event.preventDefault();
@@ -40,7 +40,8 @@
     optArticleAuthorSelector = '.post .post-author',
     optTagsListSelector = '.tags.list',
     optCloudClassCount = '5',
-    optCloudClassPrefix = 'tag-size-';
+    optCloudClassPrefix = 'tag-size-',
+    optAuthorsListSelector = '.authors.list';
 
 
   // eslint-disable-next-line no-inner-declarations
@@ -90,15 +91,26 @@
       min: 99999
     };
     for(let tag in allTags){
-      console.log(tag + ' is used ' + allTags[tag] + ' times');
       if(allTags[tag] > params.max){
         params.max = allTags[tag];
+      }
+      if(allTags[tag] < params.min){
+        params.min = allTags[tag];
       }
     }
 
     return params;
   }
+  
+  // eslint-disable-next-line no-inner-declarations
+  function calculateTagClass (count, params) {
+    const normalizedCount = count - params.min;
+    const normalizedMax = params.max - params.min;
+    const percentage = normalizedCount / normalizedMax;
+    const classNumber = Math.floor( percentage * (optCloudClassCount - 1) + 1 );
+    return (optCloudClassPrefix + classNumber);  
 
+  }
 
   // eslint-disable-next-line no-inner-declarations 
   function generateTags() {
@@ -154,18 +166,20 @@
     const tagList = document.querySelector(optTagsListSelector);
     /* [NEW] create variable for all links HTML code */
     const tagsParams = calculateTagsParams(allTags);
-    console.log('tagsParams:', tagsParams)
-    let allTagsHTML = '';
-
+    console.log('tagsParams:', tagsParams);
+    // let allTagsHTML = '';
+    const allTagsData = {tags: []};
     /* [NEW] START LOOP: for each tag in allTags: */
     for(let tag in allTags){
       /* [NEW] generate code of a link and add it to allTagsHTML */
-      allTagsHTML += '<li><a href ="#tag-' + tag + '"class="">' + tag + ' (' + allTags[tag] + ') </a></li>';
-    }
-    /* [NEW] END LOOP: for each tag in allTags: */
-
+      allTagsData.tags.push({
+        tag: tag,
+        count: allTags[tag],
+        className: calculateTagClass(allTags[tag], tagsParams)
+      /* [NEW] END LOOP: for each tag in allTags: */
+      })}
     /*[NEW] add HTML from allTagsHTML to tagList */
-    tagList.innerHTML = allTagsHTML;
+    tagList.innerHTML = allTagsData;
   }
   
   generateTags();
@@ -246,7 +260,7 @@
     
     const author = href.replace('#author-','');
 
-    const activeAuthors = document.querySelectorAll('a.active[href^="#author-"]')
+    const activeAuthors = document.querySelectorAll('a.active[href^="#author-"]');
     
     for (let activeAuthor of activeAuthors){
       activeAuthor.classList.remove('active');
