@@ -1,6 +1,18 @@
 {
   'use strict';
   
+  const opts = {
+    articleSelector:  '.post',
+    titleSelector: '.post-title',
+    titleListSelector: '.titles',
+    articleTagsSelector: '.post-tags .list',
+    articleAuthorSelector: '.post .post-author',
+    tagsListSelector: '.tags.list',
+    cloudClassCount: '5',
+    cloudClassPrefix: 'tag-size-',
+    authorsListSelector: '.authors.list'
+  }
+
   const titleClickHandler = function (event) {
     const clickedElement = this;
     event.preventDefault();
@@ -33,36 +45,26 @@
   };
 
 
-  const optArticleSelector = '.post',
-    optTitleSelector = '.post-title',
-    optTitleListSelector = '.titles',
-    optArticleTagsSelector = '.post-tags .list',
-    optArticleAuthorSelector = '.post .post-author',
-    optTagsListSelector = '.tags.list',
-    optCloudClassCount = '5',
-    optCloudClassPrefix = 'tag-size-',
-    optAuthorsListSelector = '.authors.list';
-
+  
 
   // eslint-disable-next-line no-inner-declarations
   function generateTitleLinks(customSelector = '') {
 
     /* [DONE] remove contents of titleList */
-    const titleList = document.querySelector(optTitleListSelector);
-
+    const titleList = document.querySelector(opts.titleListSelector);
+    let html = '';
     titleList.innerHTML = '';
 
-    let html = '';
     /* [DONE] for each article */
 
-    const articles = document.querySelectorAll(optArticleSelector + customSelector);
+    const articles = document.querySelectorAll(opts.articleSelector + customSelector);
     for (let article of articles) {
 
       /* [DONE] get the article id */
       const articleId = article.getAttribute('id');
 
       /* [DONE] find the title element */
-      const articleTitle = article.querySelector(optTitleSelector).innerHTML;
+      const articleTitle = article.querySelector(opts.titleSelector).innerHTML;
     
       /* get the title from the title element */
 
@@ -107,8 +109,8 @@
     const normalizedCount = count - params.min;
     const normalizedMax = params.max - params.min;
     const percentage = normalizedCount / normalizedMax;
-    const classNumber = Math.floor( percentage * (optCloudClassCount - 1) + 1 );
-    return (optCloudClassPrefix + classNumber);  
+    const classNumber = Math.floor( percentage * (opts.CloudClassCount - 1) + 1 );
+    return (opts.CloudClassPrefix + classNumber);  
 
   }
 
@@ -119,13 +121,13 @@
     let allTags = {};
     
     /* find all articles */
-    const allArticles = document.querySelectorAll(optArticleSelector);
+    const allArticles = document.querySelectorAll(opts.articleSelector);
 
     /* START LOOP: for every article: */
     for (let article of allArticles) {
       
       /* find tags wrapper */
-      const wrapper = article.querySelector(optArticleTagsSelector);
+      const wrapper = article.querySelector(opts.articleTagsSelector);
       
       /* make html variable with empty string */
       let html = '';
@@ -163,16 +165,15 @@
       /* END LOOP: for every article: */
     }
     /* [NEW] find list of tags in right column */
-    const tagList = document.querySelector(optTagsListSelector);
+    const tagList = document.querySelector(opts.tagsListSelector);
     /* [NEW] create variable for all links HTML code */
     const tagsParams = calculateTagsParams(allTags);
-    console.log('tagsParams:', tagsParams);
     let allTagsHTML = '';
 
     /* [NEW] START LOOP: for each tag in allTags: */
     for(let tag in allTags){
       /* [NEW] generate code of a link and add it to allTagsHTML */
-      allTagsHTML += '<li><a href="#tag-' + tag + '">' + tag + ' (' + allTags[tag] + ')' + '</a></li>';
+      allTagsHTML += '<li><a href="#tag-' + tag + '" class="' + calculateTagClass(allTags[tag], tagsParams) + '">' + tag + ' (' + allTags[tag] + ')' + '</a></li>';
     /* [NEW] END LOOP: for each tag in allTags: */
     }
     /*[NEW] add HTML from allTagsHTML to tagList */
@@ -229,10 +230,10 @@
   // eslint-disable-next-line no-inner-declarations
   function generateAuthors () {
     let allAuthors = {};
-    const allArticle = document.querySelectorAll(optArticleSelector);
+    const allArticle = document.querySelectorAll(opts.articleSelector);
 
     for (let author of allArticle) {
-      const wrapper = author.querySelector(optArticleAuthorSelector);
+      const wrapper = author.querySelector(opts.articleAuthorSelector);
 
       let html = '';
       let by = 'by ';
@@ -252,7 +253,7 @@
       }
     }console.log(allAuthors);
 
-    const authorList = document.querySelector(optAuthorsListSelector);
+    const authorList = document.querySelector(opts.authorsListSelector);
     
     let allAuthorsHTML = '';
 
@@ -260,7 +261,7 @@
       allAuthorsHTML +='<li><a href="#author-' +author +'"><span>' + author +' (' +allAuthors[author] +')</span></a></li> ';
     }
     authorList.innerHTML = allAuthorsHTML;
-  };
+  }
   generateAuthors();
 
   // eslint-disable-next-line no-inner-declarations
