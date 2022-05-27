@@ -83,15 +83,17 @@
     }
         
     titleList.innerHTML = html;
+
+    const links = document.querySelectorAll('.titles a');
+  
+    for (let link of links) {
+      link.addEventListener('click', titleClickHandler);
+    }
+  
   }
 
   generateTitleLinks();
 
-  const links = document.querySelectorAll('.titles a');
-  
-  for (let link of links) {
-    link.addEventListener('click', titleClickHandler);
-  }
 
   // eslint-disable-next-line no-inner-declarations
   function calculateTagsParams (allTags) {
